@@ -35,7 +35,7 @@ if st.button("Consultar tipo de cambio"):
     if "error" in exchange_rate_data:
         st.error(exchange_rate_data['error'])
     else:
-        rate = exchange_rate_data['rate'][target_currency]
+        rate = exchange_rate_data['rates'][target_currency]
         st.success(f'1 {base_currency} = {rate} {target_currency}')
 
     #Espacio para anotar comentarios
