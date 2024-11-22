@@ -20,6 +20,7 @@ def get_exchange_rate(base_currency="USD",target_currency="EUR"):
 # Guardar los dtos en supabase
 def save_to_supabase(data):
     response = supabase.table("exchange_rates").insert(data).execute()
+    print(response)
     return response
 
 #Interfaz con streamlit
