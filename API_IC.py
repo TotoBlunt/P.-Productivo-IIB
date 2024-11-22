@@ -23,3 +23,33 @@ def save_to_supabase(data):
 
 #Interfaz con streamlit
 st.title("Consulta y Registro de tipo de cambio")
+
+#Seleccionar las monedas
+base_currency = st.selectbox("Moneda Base", ["USD","EUR","PEN"])
+target_currency = st.selectbox("Moneda Objetivo", ["USD","EUR","PEN"])
+
+#Consultar el tipo de cambio
+if st.button("Consultar tipo de cambio"):
+    exchange_rate_data = get_exchange_rate(base_currency,target_currency)
+    if "error" in exchange_rate_data:
+        st.error(exchange_rate_data['error'])
+    else:
+        rate = exchange_rate_data['rates'][target_currency]
+        st.success(f'1 {base_currency} = {rate} {target_currency}')
+
+    #Espacio para anotar comentarios
+    comment = st.text_area("Escribe un comentario sobre esta consulta: ")
+
+    if st.button("Guardar en supabase"):
+        data_to_save = {
+            "base_currency" : base_currency,
+            "target_currency" : target_currency,
+            "exchange_rate" : rate,
+            "comment" : comment
+        }
+
+        response = save_to_supabase(data_to_save)
+        if response.status == 201:
+            st.sucess("Datos guardados en el supabase")
+        else:
+            st.error("Error al guardar los datos en supabase")
